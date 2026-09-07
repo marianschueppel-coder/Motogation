@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kurvenkarte</title>
+<meta name="description" content="Eigene Motorrad-Touren importieren, nach Zeit, Kurvenanzahl und Kurvigkeit filtern.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#14171A">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <h1>Kurvenkarte</h1>
+  <label class="upload-btn">
+    GPX importieren
+    <input type="file" id="gpx-input" accept=".gpx" multiple hidden>
+  </label>
+</header>
+
+<main>
+  <div id="map"></div>
+
+  <section class="panel">
+    <div class="route-builder">
+      <h2>Route erstellen</h2>
+      <div class="field-row">
+        <input type="text" id="start-input" placeholder="Start (Ort oder Adresse)">
+        <button id="use-location-btn" class="icon-btn" type="button" title="Aktuellen Standort verwenden">📍</button>
+      </div>
+      <input type="text" id="end-input" placeholder="Ziel (Ort oder Adresse)">
+      <button id="build-route-btn" class="primary-btn" type="button">Route berechnen</button>
+      <p id="route-builder-status" class="status-text"></p>
+    </div>
+
+    <div class="sort-row" id="sort-row" role="group" aria-label="Sortierung">
+      <button class="chip active" data-sort="curviness">Kurvigste zuerst</button>
+      <button class="chip" data-sort="curves">Meiste Kurven</button>
+      <button class="chip" data-sort="duration">Kürzeste Zeit</button>
+      <button class="chip" data-sort="distance">Kürzeste Distanz</button>
+    </div>
+
+    <div class="filter-row">
+      <label for="min-curves">Mind. Kurven</label>
+      <input type="number" id="min-curves" min="0" value="0" inputmode="numeric">
+    </div>
+
+    <ul id="route-list" class="route-list"></ul>
+    <p id="empty-state" class="empty-state">Noch keine Routen importiert. Lade eine oder mehrere GPX-Dateien hoch, um loszulegen.</p>
+  </section>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/gpx.js"></script>
+<script src="js/curves.js"></script>
+<script src="js/routing.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

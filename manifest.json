@@ -1,0 +1,9 @@
+{
+  "name": "Kurvenkarte",
+  "short_name": "Kurvenkarte",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#14171A",
+  "theme_color": "#14171A",
+  "icons": []
+}
