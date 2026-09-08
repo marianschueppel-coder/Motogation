@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -55,7 +55,17 @@
   </section>
 </main>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<div id="fatal-error" class="fatal-error" hidden></div>
+<script>
+  // Fängt Fehler beim Laden von Leaflet/App-Skripten ab und zeigt sie sichtbar an,
+  // statt dass die App bei einem Fehler einfach nur stumm nichts tut.
+  window.addEventListener('error', function (e) {
+    var box = document.getElementById('fatal-error');
+    box.hidden = false;
+    box.textContent = 'Fehler beim Laden: ' + e.message + (e.filename ? ' (' + e.filename.split('/').pop() + ')' : '');
+  });
+</script>
+<script src="vendor/leaflet/leaflet.js"></script>
 <script src="js/gpx.js"></script>
 <script src="js/curves.js"></script>
 <script src="js/routing.js"></script>
