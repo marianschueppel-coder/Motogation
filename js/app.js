@@ -44,19 +44,26 @@ try {
 const routeLayers = new Map(); // id -> L.Polyline
 
 function curvinessColor(curviness) {
-  if (curviness >= 3.5) return '#FF6A00';
-  if (curviness >= 1.5) return '#E8A33D';
-  return '#4FB286';
+  if (curviness >= 3.5) return '#E91E8C'; // hoch: Pink/Magenta
+  if (curviness >= 1.5) return '#8E44AD'; // mittel: Violett
+  return '#2E86DE'; // niedrig: kräftiges Blau
 }
 
 function drawRoute(route) {
-  const layer = L.polyline(route.path, {
-    color: curvinessColor(route.stats.curviness),
+  const color = curvinessColor(route.stats.curviness);
+  const outline = L.polyline(route.path, {
+    color: '#0B0D0E',
+    weight: 7,
+    opacity: 0.55
+  });
+  const line = L.polyline(route.path, {
+    color,
     weight: 4,
-    opacity: 0.85
-  }).addTo(map);
-  layer.on('click', () => selectRoute(route.id));
-  routeLayers.set(route.id, layer);
+    opacity: 0.95
+  });
+  const group = L.featureGroup([outline, line]).addTo(map);
+  group.on('click', () => selectRoute(route.id));
+  routeLayers.set(route.id, group);
 }
 
 function redrawAllRoutes() {
@@ -148,6 +155,14 @@ buildRouteBtn.addEventListener('click', async () => {
     return;
   }
 
+  const routeName = `${startQuery} → ${endQuery}`;
+  const existing = routes.find(r => r.source === 'generated' && r.name.toLowerCase() === routeName.toLowerCase());
+  if (existing) {
+    selectRoute(existing.id);
+    setStatus('Diese Route ist schon in der Liste (unten ausgewählt).', false);
+    return;
+  }
+
   buildRouteBtn.disabled = true;
   try {
     setStatus('Suche Orte…', false);
@@ -166,7 +181,7 @@ buildRouteBtn.addEventListener('click', async () => {
 
     const route = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-      name: `${startQuery} → ${endQuery}`,
+      name: routeName,
       path,
       stats,
       source: 'generated',
